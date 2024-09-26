@@ -5,11 +5,11 @@
   "engines": {
     "node": "20.x"
   },
-  "main": "index.js",
- "scripts": {
-  "build": "prisma generate && next build",  
-  "postinstall": "prisma generate"
-},
+  "main": "server.js",
+  "scripts": {
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,5 +20,10 @@
   },
   "devDependencies": {
     "prisma": "^5.20.0"
+  },
+  "next": {
+    "images": {
+      "unoptimized": true
+    }
   }
 }
