@@ -31,16 +31,16 @@ app.get('/vagas', async (req, res) => {
     let vagas = [];
 
     if (req.query) {
-        vagas = await prisma.vaga.findMany ({
+        vagas = await prisma.vaga.findMany({
             where: {
                 nome: req.query.nome,
-                localizacao : req.query.localizacao
+                localizacao: req.query.localizacao
             }
         })
     } else {
         vagas = await prisma.vaga.findMany()
     }
-    
+
     res.status(200).json(vagas);
 })
 
@@ -72,7 +72,7 @@ app.delete('/vagas/:id', async (req, res) => {
         where: {
             id: req.params.id,
         }
-        }),
+    }),
 
         res.status(200).json({ Message: 'Vaga deletada com sucesso!' })
 })
@@ -87,4 +87,5 @@ app.listen(3006)
 -Deletar um usuário
 usuario : userlccopper senha : Lccopper123456
 npx prisma studio para ver o banco
+npx prisma generate para atualizar as tabelas no mongodb
  */
