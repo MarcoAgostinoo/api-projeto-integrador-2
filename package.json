@@ -6,11 +6,10 @@
     "node": "20.x"
   },
   "main": "index.js",
-  "scripts": {
-    "start": "node server.js",
-    "build": "prisma generate",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+ "scripts": {
+  "build": "prisma generate && next build",  
+  "postinstall": "prisma generate"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
