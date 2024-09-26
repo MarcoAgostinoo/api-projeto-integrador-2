@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
     return res.json("conectou vagas");
 })
 
-app.post('/usuarios', async (req, res) => {
+app.post('/vagas', async (req, res) => {
 
     await prisma.vaga.create({
         data: {
@@ -27,7 +27,7 @@ app.post('/usuarios', async (req, res) => {
     res.status(201).json(req.body);
 })
 
-app.get('/usuarios', async (req, res) => {
+app.get('/vagas', async (req, res) => {
     let vagas = [];
 
     if (req.query) {
@@ -45,7 +45,7 @@ app.get('/usuarios', async (req, res) => {
 })
 
 
-app.put('/usuarios/:id', async (req, res) => {
+app.put('/vagas/:id', async (req, res) => {
 
     console.log(req)
 
@@ -67,7 +67,7 @@ app.put('/usuarios/:id', async (req, res) => {
     res.status(201).json(req.body);
 })
 
-app.delete('/usuarios/:id', async (req, res) => {
+app.delete('/vagas/:id', async (req, res) => {
     await prisma.vaga.delete({
         where: {
             id: req.params.id,
@@ -81,8 +81,8 @@ app.listen(3006)
 
 
 /*
--Criar usuarios
--Listar usuarios
+-Criar vagas
+-Listar vagas
 -Editar um usuário
 -Deletar um usuário
 usuario : userlccopper senha : Lccopper123456
