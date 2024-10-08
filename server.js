@@ -7,7 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173'], // Permitir requisições do frontend em desenvolvimento
+    origin: ['http://localhost:5173', 'https://projeto-integrador-2-kappa.vercel.app'], // Permitir requisições do frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
     credentials: true // Se você precisar de cookies ou autenticação
 }));
