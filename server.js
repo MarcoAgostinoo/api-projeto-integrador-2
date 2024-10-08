@@ -1,86 +1,93 @@
 import express from "express";
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 import cors from 'cors'; 
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
+const app = express();
 
-const app = express()
-app.use(express.json())
-app.use(cors());
-
-
+app.use(express.json());
+app.use(cors({
+    origin: ['http://localhost:5173'], // Permitir requisições do frontend em desenvolvimento
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    credentials: true // Se você precisar de cookies ou autenticação
+}));
 
 app.get('/', (req, res) => {
     return res.json("conectou vagas");
-})
+});
 
 app.post('/vagas', async (req, res) => {
-
-    await prisma.vaga.create({
-        data: {
-            nome: req.body.nome,
-            descricao: req.body.descricao,
-            requisitos: req.body.requisitos,
-            salario: req.body.salario,
-            localizacao: req.body.localizacao,
-        }
-    })
-
-    res.status(201).json(req.body);
-})
+    try {
+        const vaga = await prisma.vaga.create({
+            data: {
+                nome: req.body.nome,
+                descricao: req.body.descricao,
+                requisitos: req.body.requisitos,
+                salario: req.body.salario,
+                localizacao: req.body.localizacao,
+            }
+        });
+        res.status(201).json(vaga);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao criar vaga' });
+    }
+});
 
 app.get('/vagas', async (req, res) => {
-    let vagas = [];
-
-    if (req.query) {
-        vagas = await prisma.vaga.findMany({
-            where: {
-                nome: req.query.nome,
-                localizacao: req.query.localizacao
-            }
-        })
-    } else {
-        vagas = await prisma.vaga.findMany()
+    try {
+        let vagas;
+        if (req.query) {
+            vagas = await prisma.vaga.findMany({
+                where: {
+                    nome: req.query.nome,
+                    localizacao: req.query.localizacao
+                }
+            });
+        } else {
+            vagas = await prisma.vaga.findMany();
+        }
+        res.status(200).json(vagas);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar vagas' });
     }
-
-    res.status(200).json(vagas);
-})
-
+});
 
 app.put('/vagas/:id', async (req, res) => {
-
-    console.log(req)
-
-    await prisma.vaga.update({
-
-        where: {
-            id: req.params.id
-        },
-
-        data: {
-            nome: req.body.nome,
-            descricao: req.body.descricao,
-            requisitos: req.body.requisitos,
-            salario: req.body.salario,
-            localizacao: req.body.localizacao,
-        }
-    })
-
-    res.status(201).json(req.body);
-})
+    try {
+        const vaga = await prisma.vaga.update({
+            where: {
+                id: Number(req.params.id), // Certifique-se de que o ID seja um número
+            },
+            data: {
+                nome: req.body.nome,
+                descricao: req.body.descricao,
+                requisitos: req.body.requisitos,
+                salario: req.body.salario,
+                localizacao: req.body.localizacao,
+            }
+        });
+        res.status(200).json(vaga);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao atualizar vaga' });
+    }
+});
 
 app.delete('/vagas/:id', async (req, res) => {
-    await prisma.vaga.delete({
-        where: {
-            id: req.params.id,
-        }
-    }),
+    try {
+        await prisma.vaga.delete({
+            where: {
+                id: Number(req.params.id), // Certifique-se de que o ID seja um número
+            }
+        });
+        res.status(200).json({ message: 'Vaga deletada com sucesso!' });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao deletar vaga' });
+    }
+});
 
-        res.status(200).json({ Message: 'Vaga deletada com sucesso!' })
-})
-
-app.listen(3006)
-
+app.listen(3006, () => {
+    console.log('Servidor rodando na porta 3006');
+});
 
 /*
 -Criar vagas
