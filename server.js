@@ -4,13 +4,12 @@ import cors from 'cors';
 
 const prisma = new PrismaClient();
 const app = express();
-
-app.use(express.json());
 app.use(cors({
     origin: ['http://localhost:5173', 'https://projeto-integrador-2-kappa.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
+app.use(express.json());
 
 app.get('/', (req, res) => {
     return res.json("conectou vagas");
