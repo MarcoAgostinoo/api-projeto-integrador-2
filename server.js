@@ -7,10 +7,10 @@ const app = express();
 const corsOrigin = process.env.NEXT_PUBLIC_CORS_ORIGIN || 'http://localhost:5173';
 
 app.use(cors({
-    origin: corsOrigin,
+    origin: ['http://localhost:5173'],  // Add your frontend development URL here
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
-}));
+  }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
