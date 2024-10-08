@@ -7,9 +7,9 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://projeto-integrador-2-kappa.vercel.app'], // Permitir requisições do frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    credentials: true // Se você precisar de cookies ou autenticação
+    origin: ['http://localhost:5173', 'https://projeto-integrador-2-kappa.vercel.app'], 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    credentials: true 
 }));
 
 app.get('/', (req, res) => {
@@ -53,10 +53,10 @@ app.get('/vagas', async (req, res) => {
 });
 
 app.put('/vagas/:id', async (req, res) => {
-    try {
-        const vaga = await prisma.vaga.update({
+
+             await prisma.vaga.update({
             where: {
-                id: Number(req.params.id), // Certifique-se de que o ID seja um número
+                id: req.params.id 
             },
             data: {
                 nome: req.body.nome,
@@ -66,24 +66,19 @@ app.put('/vagas/:id', async (req, res) => {
                 localizacao: req.body.localizacao,
             }
         });
-        res.status(200).json(vaga);
-    } catch (error) {
-        res.status(500).json({ error: 'Erro ao atualizar vaga' });
-    }
+        res.status(201).json(req.body);
 });
 
+
 app.delete('/vagas/:id', async (req, res) => {
-    try {
-        await prisma.vaga.delete({
-            where: {
-                id: Number(req.params.id), // Certifique-se de que o ID seja um número
-            }
-        });
-        res.status(200).json({ message: 'Vaga deletada com sucesso!' });
-    } catch (error) {
-        res.status(500).json({ error: 'Erro ao deletar vaga' });
-    }
-});
+    await prisma.vaga.delete({
+        where: {
+            id: req.params.id,
+        }
+    }),
+
+        res.status(200).json({ Message: 'Vaga deletada com sucesso!' })
+})
 
 app.listen(3006, () => {
     console.log('Servidor rodando na porta 3006');
