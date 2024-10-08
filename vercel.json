@@ -10,7 +10,21 @@
     {
       "src": "/(.*)",
       "dest": "/server.js",
-      "methods": ["GET", "POST", "PUT", "DELETE"]
+      "methods": ["GET", "POST", "PUT", "DELETE"],
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "http://localhost:5173" // Replace with your frontend's origin
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, X-Requested-With, Authorization" // Adjust based on your API needs
+        }
+      ]
     }
   ]
 }
