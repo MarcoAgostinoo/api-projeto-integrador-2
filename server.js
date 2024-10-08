@@ -1,11 +1,13 @@
 import express from "express";
 import { PrismaClient } from '@prisma/client';
-import cors from 'cors'; 
+import cors from 'cors';
 
 const prisma = new PrismaClient();
 const app = express();
+const corsOrigin = process.env.NEXT_PUBLIC_CORS_ORIGIN || 'http://localhost:5173';
+
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://projeto-integrador-2-kappa.vercel.app'],
+    origin: corsOrigin,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
@@ -53,19 +55,19 @@ app.get('/vagas', async (req, res) => {
 
 app.put('/vagas/:id', async (req, res) => {
 
-             await prisma.vaga.update({
-            where: {
-                id: req.params.id 
-            },
-            data: {
-                nome: req.body.nome,
-                descricao: req.body.descricao,
-                requisitos: req.body.requisitos,
-                salario: req.body.salario,
-                localizacao: req.body.localizacao,
-            }
-        });
-        res.status(201).json(req.body);
+    await prisma.vaga.update({
+        where: {
+            id: req.params.id
+        },
+        data: {
+            nome: req.body.nome,
+            descricao: req.body.descricao,
+            requisitos: req.body.requisitos,
+            salario: req.body.salario,
+            localizacao: req.body.localizacao,
+        }
+    });
+    res.status(201).json(req.body);
 });
 
 
