@@ -1,10 +1,12 @@
 import express from "express";
 import { PrismaClient } from '@prisma/client'
+import cors from 'cors'; 
 
 const prisma = new PrismaClient()
 
-const app = express();
-app.use(express.json());
+const app = express()
+app.use(express.json())
+app.use(cors());
 
 
 
@@ -88,4 +90,7 @@ app.listen(3006)
 usuario : userlccopper senha : Lccopper123456
 npx prisma studio para ver o banco
 npx prisma generate para atualizar as tabelas no mongodb
+npm install -g vercel para fazer deploy na vercel 
+vercel login para logar na vercel
+vercel - para finalizar
  */
