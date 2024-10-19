@@ -4,13 +4,27 @@ import cors from 'cors';
 
 const prisma = new PrismaClient();
 const app = express();
-const corsOrigin = process.env.NEXT_PUBLIC_CORS_ORIGIN || 'http://localhost:5173';
+const corsOrigin = process.env.NEXT_PUBLIC_CORS_ORIGIN || 'http://localhost:3000,http://localhost:5173';
 
 app.use(cors({
-    origin: ['http://localhost:5173'],  // Add your frontend development URL here
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-  }));
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://frontend-crud-lccooper.vercel.app'], // Permite as origens locais e da Vercel
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+        'X-CSRF-Token',
+        'X-Requested-With',
+        'Accept',
+        'Accept-Version',
+        'Content-Length',
+        'Content-MD5',
+        'Content-Type',
+        'Date',
+        'X-Api-Version',
+        'Authorization'
+    ],
+    credentials: true, // Permite o envio de cookies e cabeçalhos de autorização
+}));
+
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
