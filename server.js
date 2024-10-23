@@ -1,13 +1,13 @@
-import express from "express";
+import express from "express"; 
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 
 const prisma = new PrismaClient();
 const app = express();
-const corsOrigin = process.env.NEXT_PUBLIC_CORS_ORIGIN || 'https://www.lccopper.com';
+const corsOrigin = process.env.NEXT_PUBLIC_CORS_ORIGIN || '*'; // Permitir todas as origens
 
 app.use(cors({
-    origin: ['https://www.lccopper.com'], // Permite as origens locais e da Vercel
+    origin: ['https://www.lccopper.com', 'https://api-vagas-lccopper.vercel.app'], // Permitir origens da Vercel e seu frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
         'X-CSRF-Token',
@@ -23,7 +23,6 @@ app.use(cors({
     ],
     credentials: true, // Permite o envio de cookies e cabeçalhos de autorização
 }));
-
 
 app.use(express.json());
 
@@ -51,7 +50,7 @@ app.post('/vagas', async (req, res) => {
 app.get('/vagas', async (req, res) => {
     try {
         let vagas;
-        if (req.query) {
+        if (req.query.nome || req.query.localizacao) {
             vagas = await prisma.vaga.findMany({
                 where: {
                     nome: req.query.nome,
@@ -68,32 +67,37 @@ app.get('/vagas', async (req, res) => {
 });
 
 app.put('/vagas/:id', async (req, res) => {
-
-    await prisma.vaga.update({
-        where: {
-            id: req.params.id
-        },
-        data: {
-            nome: req.body.nome,
-            descricao: req.body.descricao,
-            requisitos: req.body.requisitos,
-            salario: req.body.salario,
-            localizacao: req.body.localizacao,
-        }
-    });
-    res.status(201).json(req.body);
+    try {
+        await prisma.vaga.update({
+            where: {
+                id: req.params.id
+            },
+            data: {
+                nome: req.body.nome,
+                descricao: req.body.descricao,
+                requisitos: req.body.requisitos,
+                salario: req.body.salario,
+                localizacao: req.body.localizacao,
+            }
+        });
+        res.status(201).json(req.body);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao atualizar vaga' });
+    }
 });
 
-
 app.delete('/vagas/:id', async (req, res) => {
-    await prisma.vaga.delete({
-        where: {
-            id: req.params.id,
-        }
-    }),
-
-        res.status(200).json({ Message: 'Vaga deletada com sucesso!' })
-})
+    try {
+        await prisma.vaga.delete({
+            where: {
+                id: req.params.id,
+            }
+        });
+        res.status(200).json({ Message: 'Vaga deletada com sucesso!' });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao deletar vaga' });
+    }
+});
 
 app.listen(3006, () => {
     console.log('Servidor rodando na porta 3006');
