@@ -4,10 +4,10 @@ import cors from 'cors';
 
 const prisma = new PrismaClient();
 const app = express();
-const corsOrigin = process.env.NEXT_PUBLIC_CORS_ORIGIN || 'http://localhost:3000,http://localhost:5173';
+const corsOrigin = process.env.NEXT_PUBLIC_CORS_ORIGIN || ['http://localhost:3000', 'https://www.lccopper.com'];
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://frontend-crud-lccooper.vercel.app'], // Permite as origens locais e da Vercel
+    origin: corsOrigin,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
         'X-CSRF-Token',
